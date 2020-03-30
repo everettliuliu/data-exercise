@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<script type="text/javascript">
+			
+			var singleNumber = function(nums) {
+			    for(let i = 0;i<nums.length;i++){
+			        if(nums.indexOf(i)==nums.lastIndexOf(i)){
+					console.log(i)
+					return nums[i]}
+			       
+			    }
+			};
+			console.log(singleNumber([1,1,2]))
+		</script>
+	</body>
+</html>

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+</body>
+<script type="text/javascript">
+	
+	function hashTable(){
+		
+		//属性 链地址法
+		//存储元素
+		this.storage = []
+		//计数 影响加载因子，增加减少长度
+		this.count = 0
+		//长度
+		this.limit = 7
+		
+		//方法
+		//哈希函数
+		hashTable.prototype.hashFun = function(str,size){
+			//定义哈希code
+			let hashCode = 0
+			//进行霍纳算法
+			for (let i = 0; i < str.length; i++) {
+				//string=>unicode 并且进行霍纳算法（anx+an-1）x+an-2...
+				hashCode = hashCode * 37+ str.charCodeAt(i)
+			}
+			//取余操作
+			let index = hashCode % size
+			return index
+		}
+		
+		//插入/修改数据
+		hashTable.prototype.put = function(key,value){
+			//1获取索引值，确定桶位置
+			let index = this.hashFun(key,this.limit)
+			//2根据索引值取出桶 如果桶不存在则创建桶 bucket
+			let bucket = this.storage[index]
+			
+			if(bucket == null){
+				bucket = []
+				this.storage[index] = bucket
+			}
+			//3进行遍历 如果存在则修改 如果不存在则插入
+			for (let i = 0; i < bucket.length; i++) {
+				let tuple = bucket[i]
+				if(tuple[0] = key){
+					tuple[1] = value
+					return
+				}
+			}
+			//4进行添加操作
+			bucket.push([key,value])
+			this.count++
+			
+			if(this.count > this.limit*0.75){
+				let newNum = this.limit*2
+				let newSize = this.getPrime(newNum)
+				this.resize(newSize)
+			}
+		}
+		
+		//获取方法
+		hashTable.prototype.get = function(key){
+			//1获取索引值，确定桶位置
+			let index = this.hashFun(key,this.limit)
+			//2判断桶是否为null
+			let bucket = this.storage[index]
+			
+			if(bucket == null) return null
+			//3线性查找 有则返回 无则null
+			for (let i = 0; i < bucket.length; i++) {
+				if(bucket[i][0]==key){
+					return bucket[i][1]
+				}
+			}
+			return null
+		}
+		
+		//删除方法
+		hashTable.prototype.remove = function(key){
+			//1获取索引值，确定桶位置
+			let index = this.hashFun(key,this.limit)
+			//2判断桶是否为null
+			let bucket = this.storage[index]
+			
+			if(bucket == null) return null
+			//3线性查找 有则返回 无则null
+			for (let i = 0; i < bucket.length; i++) {
+				let tuple = bucket[i]
+				if(tuple[0]==key){
+					bucket.splice(i,1)
+					this.count--
+					if(this.count>7 && this.count < this.limit*0.25){
+						let newNum = Math.floor(this.limit/2)
+						let newSize = this.getPrime(newNum)
+						this.resize(newSize)
+					}
+					return tuple[1]
+				}
+			}
+			return null
+		}
+		
+		//isempty
+		hashTable.prototype.isEmpty = function(){
+			return this.count == 0
+		}
+		
+		//元素个数
+		hashTable.prototype.size = function(){
+			return this.count
+		}
+	
+		//扩容
+		hashTable.prototype.resize = function(newLimit){
+			//1保存局部变量
+			let oldStorage = this.storage 
+			//2重置属性
+			this.storage = []
+			this.count = 0
+			this.limit = newLimit
+			//遍历插入
+			for (let i = 0; i < oldStorage.length; i++) {
+				let bucket = oldStorage[i]
+				if(bucket == null){
+					continue
+				}
+				for (let j = 0; j < bucket.length; j++) {
+					let tuple = bucket[j]
+					this.put(tuple[0],tuple[1])
+				}
+			}
+			
+		}
+		
+		hashTable.prototype.isPrime = function(num){
+			let temp = parseInt(Math.sqrt(num))
+			for (let i=2; i <= temp; i++) {
+				if (num % i == 0) {
+					return false
+				}
+			}
+			return true
+		}
+		//获取质数
+		hashTable.prototype.getPrime = function(num){
+
+			while(!this.isPrime(num)){
+				num++
+			}
+			//console.log(num);
+			return num 
+		}
+	}
+	
+	let hash1 = new hashTable()
+	hash1.put('abc','123')
+	hash1.put('adc','124')
+	hash1.put('aec','125')
+	hash1.put('afc','126')
+	hash1.put('agc','127')
+	console.log(hash1)
+	hash1.put('ahc','128')
+	console.log(hash1)
+	hash1.put('aic','129')
+	hash1.put('ajc','130')
+	console.log(hash1)
+	console.log(hash1.size())
+	console.log(hash1.get('ajc'))
+
+</script>
+</html>

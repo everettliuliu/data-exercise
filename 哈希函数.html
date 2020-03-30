@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+<script type="text/javascript">
+	function hashFun(str,size){
+		//定义哈希code
+		var hashCode = 0
+		//进行霍纳算法
+		for (let i = 0; i < str.length; i++) {
+			//string=>unicode 并且进行霍纳算法（anx+an-1）x+an-2...
+			hashCode = hashCode * 37+ str.charCodeAt(i)
+		}
+		//取余操作
+		var index = hashCode % size
+		return index
+	}
+	console.log(hashFun('abc',7));
+</script>
+</body>
+</html>

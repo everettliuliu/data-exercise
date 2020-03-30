@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+</head>
+<body>
+</body>
+<script src="js/dict.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/queue.js" type="text/javascript" charset="utf-8"></script>
+<script src="js/stack.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	function Graph(){
+		const WHITE = 'white'
+		const GREY  = 'grey'
+		const BLACK = 'blace'
+		// 属性
+		this.vertexes = []
+		
+		this.edges = new Dictionay()
+		//  方法
+		//加入顶点
+		Graph.prototype.addVertex = function(vertex){
+			//加顶点
+			this.vertexes.push(vertex)
+			// 创建边的顶点
+			this.edges.set(vertex,[])
+		}
+		
+		//加入边
+		Graph.prototype.addEdge = function(vertex1,vertex2){
+			//加入边
+			//if(this.vertexes.indexOf(vertex1) == -1)this.addVertex(vertex1)
+			//if(this.vertexes.indexOf(vertex2) == -1)this.addVertex(vertex2)
+			this.edges.get(vertex1).push(vertex2)
+			this.edges.get(vertex2).push(vertex1)
+		}
+		
+		//返回图
+		Graph.prototype.toString = function(){
+			var result = ''
+			for (let i = 0; i < this.vertexes.length; i++) {
+				result += this.vertexes[i] + ' => '
+				let edge = this.edges.get(this.vertexes[i])
+				edge.forEach((value)=>result += value +' ')
+				result += '\n'
+			}
+			return result
+		}
+	
+		//初始化状态
+		Graph.prototype.initializeColor = function(){
+			let colors = []
+			for (let i = 0; i < this.vertexes.length; i++) {
+				colors[this.vertexes[i]] = WHITE
+			}
+			return colors
+		}
+		
+		//广度优先搜索
+		Graph.prototype.BFS = function(initV,handle){
+			
+			let colors = this.initializeColor()
+			
+			let queue = new Queue()
+			
+			queue.enqueue(initV)
+			
+			while(!queue.isEmpty()){
+				let vertex = queue.dequeue()
+				
+				let vList  = this.edges.get(vertex)
+				
+				colors[vertex] = GREY
+				
+				for (let i = 0; i < vList.length; i++) {
+					let e = vList[i]
+					if(colors[e] == WHITE){
+						colors[e] = GREY
+						queue.enqueue(e)
+					}
+				}
+				
+				handle(vertex)
+				
+				colors[vertex] = BLACK
+			}
+		}
+	
+		//深度优先搜索
+		Graph.prototype.DFS = function(initV,handle){
+			let colors = this.initializeColor()
+			this.dfsVisit(initV,colors,handle)
+		}
+		
+		Graph.prototype.dfsVisit = function(vertex,colors,handle){
+			colors[vertex] = GREY
+			
+			handle(vertex)
+			
+			let vList = this.edges.get(vertex)
+			for (let i = 0; i < vList.length; i++) {
+				let e = vList[i]
+				if(colors[e] == WHITE){
+					this.dfsVisit(e,colors,handle)
+				}
+			}
+			colors[vertex] = BLACK
+		}
+	}
+	
+	let graph = new Graph()
+	
+	let myVertexes = ['A','B','D','C','E','F','I','H','G']
+	for (let i = 0; i < myVertexes.length; i++) {
+		graph.addVertex(myVertexes[i])
+	}
+
+	graph.addEdge('A', 'B'); 
+	graph.addEdge('A', 'C');	
+	graph.addEdge('A', 'D');
+	graph.addEdge('C', 'D');
+	graph.addEdge('C', 'G');
+	graph.addEdge('D', 'G');
+	graph.addEdge('D', 'H');
+	graph.addEdge('B', 'E');
+	graph.addEdge('B', 'F');
+	graph.addEdge('E', 'I'); 
+	console.log(graph.toString())
+	let arr = []
+	
+	graph.BFS(graph.vertexes[0],function(vertex){
+		arr.push(vertex)
+	})
+	console.log(arr)
+	
+	arr = []
+	graph.DFS(graph.vertexes[0],function(vertex){
+		arr.push(vertex)
+	})
+	console.log(arr)
+</script>
+</html>

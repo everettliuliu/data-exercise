@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		function LinkedList(){
+			//节点类
+			function Node(data){
+				this.data = data
+				this.next = null
+			}
+			// 属性初始化
+			this.head = null
+			this.length = 0 
+			
+			//方法
+			LinkedList.prototype.append=function(data){ 
+				
+				var newNode = new Node(data)
+				
+				if(!this.length){
+					this.head = newNode
+				}else{
+					var current = this.head
+					while(current.next){
+						current = current.next
+					}
+					current.next = newNode
+				}
+				this.length++
+			}
+			LinkedList.prototype.insert=function(position,data){
+				
+				var newNode = new Node(data)
+				
+				if(position < 0 || position > this.length){
+					return false
+				}else if(!position){
+					newNode.next = this.head
+					this.head = newNode
+				}else{
+					var current = this.head
+					var previous = null
+					for (let i = 0; i < position; i++) {
+						previous = current
+						current = current.next
+					}
+					newNode.next = current
+					previous.next = newNode
+					}
+				
+				this.length++
+			}
+			LinkedList.prototype.get=function(position){
+				if(position < 0 || position >= this.length){
+					return false
+				}else{
+					var current = this.head
+					for (let i = 0; i < position; i++) {
+						current = current.next
+					}
+					return current.data
+				}
+			}
+			LinkedList.prototype.indexOf=function(data){
+				
+				var current = this.head
+				var index = 0
+				while(current){
+					if(current.data == data){
+						return index
+					}else{
+						current = current.next
+						index++
+						}
+				}
+				return -1
+				
+			}
+			LinkedList.prototype.update=function(position,data){
+				if(position < 0 || position >= this.length){
+					return false
+				}else{
+					var current = this.head
+					for (let i = 0; i < position; i++) {
+						current = current.next
+					}
+					current.data = data
+				}
+				return 1
+			}
+			LinkedList.prototype.removeAt=function(position){
+				if(position < 0 || position >= this.length){
+					return false
+				}else if(!position){
+						this.head = this.head.next
+				}else{
+					var current = this.head
+					var previous = null
+					for (let i = 0; i < position; i++) {
+						previous = current
+						current = current.next
+					}
+					previous.next = current.next
+					
+				}
+				this.length--
+				return 1
+			}
+			LinkedList.prototype.remove=function(data){
+				var current = this.head
+				var index = 0
+				var previous = null
+				while(current){
+					if(current.data == data){
+						previous.next = current.next
+						this.length--
+						return 1
+					}else{
+						previous = current
+						current = current.next
+						index++
+						}
+				}
+				return -1
+			}
+			LinkedList.prototype.isEmpty=function(){
+				return !this.length
+			}
+			LinkedList.prototype.size=function(){
+				return this.length
+			}
+			LinkedList.prototype.toString=function(){
+				var result =''
+				var current = this.head
+				while (current){
+					result += current.data + ' '
+					current = current.next
+				}
+				return result
+			}
+		}
+		
+		var ll = new LinkedList()
+		ll.append(123)
+		ll.append(234)	
+		ll.append(575)
+		ll.insert(2,1235)
+		console.log(ll.get(0))
+		console.log(ll.indexOf(123))
+		console.log(ll.update(1,432))
+		console.log(ll.remove(575))
+		console.log(ll.removeAt(3))
+		console.log(ll)
+		
+	</script>
+</html>

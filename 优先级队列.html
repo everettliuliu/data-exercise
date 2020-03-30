@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		function PriorityQueue(){
+			
+			function QueneElement(element,priority){
+				this.element = element
+				this.priority = priority
+			}
+			
+			this.items = []
+			
+			PriorityQueue.prototype.enqueue =function(element,priority){
+				
+				var queneElement =new QueneElement(element,priority)
+				if(this.items.length == 0){
+					this.items.push(queneElement)
+				}else{
+					var added = false
+					for (let i = 0; i < this.items.length; i++) {
+						if(queneElement.priority<this.items[i]){
+							this.items.splice(i,0,queneElement)
+							added = true
+							break
+						}
+					}
+					if(!added){
+						this.items.push(queneElement)
+					}
+				}
+			}
+			PriorityQueue.prototype.dequeue =function(){
+				return this.items.shift()
+			}
+			PriorityQueue.prototype.front =function(){
+				return this.items[0]
+			}
+			PriorityQueue.prototype.isEmpty =function(){
+				return this.items.length == 0
+			}
+			PriorityQueue.prototype.size =function(){
+				return this.items.length
+			}
+			PriorityQueue.prototype.toString =function(){
+				var result =''
+				for (var i = 0; i < this.items.length; i++) {
+					i==this.items.length ? result += this.items[i].element + '-'+this.items[i].priority : result += this.items[i].element + '-'+this.items[i].priority+' ' 
+				}
+				return result
+			}
+		}
+		var q = new PriorityQueue()
+		q.enqueue('abc',100)
+		q.enqueue('ac',110)
+		q.enqueue('ab',11)
+		console.log(q)
+		console.log(q.toString())
+		
+	
+	</script>
+</html>
+

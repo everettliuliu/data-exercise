@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+	</body>
+	<script type="text/javascript">
+		function Queue(){
+			this.items = []
+			Queue.prototype.enqueue =function(element){
+				return this.items.push(element)
+			}
+			Queue.prototype.dequeue =function(){
+				return this.items.shift()
+			}
+			Queue.prototype.front =function(){
+				return this.items[0]
+			}
+			Queue.prototype.isEmpty =function(){
+				return this.items.length == 0
+			}
+			Queue.prototype.size =function(){
+				return this.items.length
+			}
+			Queue.prototype.toString =function(){
+				var result =''
+				for (var i = 0; i < this.items.length; i++) {
+					result += this.items[i] + ' '
+				}
+				return result
+			}
+		}
+		var q = new Queue()
+		q.enqueue('abc')
+		q.enqueue('ac')
+		q.enqueue('ab')
+		q.dequeue()
+		console.log(q)
+		console.log(q.toString())
+		
+		//击鼓传花
+		function passGame(personList,num){
+			if(num < 1 ||personList.length < 1){
+				return -1
+			}else{
+				var queue = new Queue()
+				for (let i = 0; i < personList.length; i++) {
+					queue.enqueue(personList[i])
+				}
+				while (queue.size()>1){
+					for(let i=0;i<num-1;i++){
+					queue.enqueue(queue.dequeue())
+					}
+					queue.dequeue()
+				}
+				console.log(queue)
+				var endName = queue.front()
+				return personList.indexOf(endName)
+			}
+		}
+		arr = ['a','v','s','w','c']
+		console.log(passGame(arr,3))
+	</script>
+</html>
